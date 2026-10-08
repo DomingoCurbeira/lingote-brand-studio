@@ -76,7 +76,7 @@ export const PRESET_PROFILES: BrandProfile[] = [
 ];
 
 export const DEFAULT_CONTACT_DATA: ContactData = {
-  personName: 'Domingo Curbeira',
+  personName: 'Chef Domingo Curbeira',
   role: 'Dirección Culinaria & Eventos',
   phone: '+506 7225-7606',
   email: 'ellingoteespanol@gmail.com',
