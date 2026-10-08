@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased selection:bg-amber-500 selection:text-black;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+}
+
+/* Custom scrollbars for control panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
+}
+
+/* SCREEN ONLY: Ocultar el portal de impresión */
+@media screen {
+  #print-root {
+    display: none !important;
+  }
+}
+
+/* MOTOR DE IMPRESIÓN LIMPIO Y EXACTO */
+@media print {
+  /* Ocultar la aplicación interactiva de pantalla */
+  #root, .no-print, header, aside, nav, button {
+    display: none !important;
+  }
+
+  /* Mostrar exclusivamente el contenedor de pliego directo de body */
+  #print-root {
+    display: block !important;
+    position: static !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: letter portrait;
+    margin: 5mm;
+  }
+
+  .print-card-item {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
