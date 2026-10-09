@@ -13,7 +13,13 @@ interface PrintSheetViewProps {
   onPrint: () => void;
 }
 
-export type SheetType = 'cards-front' | 'cards-back' | 'stickers-capsule' | 'security-straps';
+export type SheetType =
+  | 'cards-front'
+  | 'cards-back'
+  | 'stickers-capsule'
+  | 'stickers-capsule-45'
+  | 'security-straps'
+  | 'tasting-badges';
 
 // Componente reusable con el diseño exacto del pliego
 export const SheetContent: React.FC<{
@@ -227,6 +233,117 @@ export const SheetContent: React.FC<{
           ))}
         </div>
       )}
+
+      {/* 4. PLIEGO DE STICKERS CIRCULARES MEDIANOS Ø 45 mm (20 unidades: 4 cols x 5 filas) */}
+      {sheetType === 'stickers-capsule-45' && (
+        <div className="grid grid-cols-4 gap-x-[5mm] gap-y-[3mm] justify-items-center items-center py-1">
+          {Array.from({ length: 20 }).map((_, index) => (
+            <div
+              key={index}
+              className="print-card-item relative rounded-full shadow-sm overflow-hidden flex flex-col items-center justify-between p-2 select-none"
+              style={{
+                width: '45mm',
+                height: '45mm',
+                backgroundColor: brand.cardBgColor,
+                color: brand.textColor,
+                border: `1.2px solid ${brand.borderColor}`,
+                boxSizing: 'border-box',
+              }}
+            >
+              <div
+                className="absolute inset-[1.5mm] rounded-full pointer-events-none"
+                style={{ border: `0.7px dashed ${brand.borderColor}66` }}
+              />
+              <span className="text-[5.5px] font-black uppercase tracking-widest mt-0.5" style={{ color: brand.accentColor }}>
+                {brand.brandName}
+              </span>
+              <div className="my-auto text-center px-1">
+                <img
+                  src={brand.logoUrl}
+                  alt="Logo"
+                  className="w-5 h-5 object-contain mx-auto mb-0.5"
+                  style={{ transform: `scale(${brand.logoScale})` }}
+                />
+                <h5 className="text-[7.5px] font-black uppercase leading-tight line-clamp-1" style={{ color: brand.textColor }}>
+                  {tasting.sampleName}
+                </h5>
+                <span className="text-[4.5px] font-bold uppercase tracking-wider" style={{ color: brand.accentColor }}>
+                  {tasting.badge}
+                </span>
+              </div>
+              <span className="text-[4.5px] font-mono opacity-60 mb-0.5">
+                {tasting.lot} • {tasting.volume}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 5. PLIEGO DE ETIQUETAS CUADRADAS 50 × 50 mm (15 unidades: 3 cols x 5 filas) */}
+      {sheetType === 'tasting-badges' && (
+        <div className="grid grid-cols-3 gap-x-[5mm] gap-y-[2.5mm] justify-items-center items-center py-1">
+          {Array.from({ length: 15 }).map((_, index) => (
+            <div
+              key={index}
+              className="print-card-item relative shadow-sm overflow-hidden flex flex-col justify-between p-2.5 select-none text-left border border-dashed border-slate-300"
+              style={{
+                width: '50mm',
+                height: '50mm',
+                backgroundColor: brand.cardBgColor,
+                color: brand.textColor,
+                borderRadius: '2mm',
+                boxSizing: 'border-box',
+              }}
+            >
+              {/* Encabezado */}
+              <div className="flex items-center justify-between border-b pb-1" style={{ borderColor: `${brand.borderColor}40` }}>
+                <div className="flex items-center gap-1.5">
+                  <img
+                    src={brand.logoUrl}
+                    alt="Logo"
+                    className="w-4 h-4 object-contain"
+                    style={{ transform: `scale(${brand.logoScale})` }}
+                  />
+                  <div>
+                    <h4 className="text-[6.5px] font-black uppercase tracking-wider leading-none">
+                      {brand.brandName}
+                    </h4>
+                    <span className="text-[5px] font-bold uppercase tracking-tight opacity-70" style={{ color: brand.accentColor }}>
+                      {tasting.badge}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Cuerpo */}
+              <div className="my-0.5 space-y-0.5">
+                <h3 className="text-[8px] font-black uppercase tracking-tight leading-tight line-clamp-1" style={{ color: brand.accentColor }}>
+                  {tasting.sampleName}
+                </h3>
+                <p className="text-[5px] font-medium leading-tight opacity-90 line-clamp-2">
+                  {tasting.instructions}
+                </p>
+                {tasting.allergens && (
+                  <p className="text-[4.5px] font-black text-red-500 uppercase tracking-tight line-clamp-1">
+                    {tasting.allergens}
+                  </p>
+                )}
+              </div>
+
+              {/* Pie con Mini QR y Lote */}
+              <div className="flex items-center justify-between border-t pt-1" style={{ borderColor: `${brand.borderColor}40` }}>
+                <div className="space-y-0.5 text-[4.5px] font-mono opacity-70">
+                  <div>LOTE: {tasting.lot}</div>
+                  <div>FECHA: {tasting.date}</div>
+                </div>
+                <div className="bg-white p-0.5 rounded shadow">
+                  <QRCodeSVG value={qrUrl} size={17} level="M" fgColor="#000000" bgColor="#FFFFFF" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -256,20 +373,25 @@ export const PrintSheetView: React.FC<PrintSheetViewProps> = ({
               Pliego de Impresión (Hoja Carta)
             </h3>
             <p className="text-[10px] text-slate-400">
-              10 tarjetas completas con guías de corte
+              {sheetType === 'cards-front' && '10 tarjetas frente (90 × 50 mm) con marcas de corte'}
+              {sheetType === 'cards-back' && '10 tarjetas dorso (90 × 50 mm) con QR dinámico'}
+              {sheetType === 'stickers-capsule' && '24 tapas Ø 35 mm (vasos 1 oz / 28 ml)'}
+              {sheetType === 'stickers-capsule-45' && '20 tapas medianas Ø 45 mm (vasos 2 oz / 50 ml)'}
+              {sheetType === 'security-straps' && '24 fajas precinto de seguridad (18 × 80 mm)'}
+              {sheetType === 'tasting-badges' && '15 etiquetas cuadradas (50 × 50 mm) para bolsas/cajas'}
             </p>
           </div>
         </div>
 
         {/* Selector de Pliego */}
-        <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+        <div className="flex flex-wrap items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs gap-1">
           <button
             onClick={() => setSheetType('cards-front')}
             className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
               sheetType === 'cards-front' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Tarjetas (Frente x10)
+            Tarjetas Frente x10
           </button>
           <button
             onClick={() => setSheetType('cards-back')}
@@ -277,7 +399,7 @@ export const PrintSheetView: React.FC<PrintSheetViewProps> = ({
               sheetType === 'cards-back' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Tarjetas (Dorso x10)
+            Tarjetas Dorso x10
           </button>
           <button
             onClick={() => setSheetType('stickers-capsule')}
@@ -285,7 +407,15 @@ export const PrintSheetView: React.FC<PrintSheetViewProps> = ({
               sheetType === 'stickers-capsule' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Stickers Tapa x24
+            Tapa 35mm x24
+          </button>
+          <button
+            onClick={() => setSheetType('stickers-capsule-45')}
+            className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+              sheetType === 'stickers-capsule-45' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Tapa 45mm x20
           </button>
           <button
             onClick={() => setSheetType('security-straps')}
@@ -294,6 +424,14 @@ export const PrintSheetView: React.FC<PrintSheetViewProps> = ({
             }`}
           >
             Fajas Precinto x24
+          </button>
+          <button
+            onClick={() => setSheetType('tasting-badges')}
+            className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+              sheetType === 'tasting-badges' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Etiquetas 50mm x15
           </button>
         </div>
 
