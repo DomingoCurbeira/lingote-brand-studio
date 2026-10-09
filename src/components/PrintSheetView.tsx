@@ -167,10 +167,10 @@ export const SheetContent: React.FC<{
         </div>
       )}
 
-      {/* 3. PLIEGO DE FAJAS PRECINTO (16 unidades: 2 cols x 8 filas) */}
+      {/* 3. PLIEGO DE FAJAS PRECINTO (24 unidades: 2 cols x 12 filas) */}
       {sheetType === 'security-straps' && (
-        <div className="grid grid-cols-2 gap-x-[4mm] gap-y-[2.5mm] justify-items-center items-center py-1">
-          {Array.from({ length: 16 }).map((_, index) => (
+        <div className="grid grid-cols-2 gap-x-[4mm] gap-y-[2mm] justify-items-center items-center py-1">
+          {Array.from({ length: 24 }).map((_, index) => (
             <div
               key={index}
               className="print-card-item relative shadow-sm overflow-hidden flex items-center justify-between px-2.5 py-1 select-none"
@@ -293,7 +293,7 @@ export const PrintSheetView: React.FC<PrintSheetViewProps> = ({
               sheetType === 'security-straps' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Fajas Precinto x16
+            Fajas Precinto x24
           </button>
         </div>
 

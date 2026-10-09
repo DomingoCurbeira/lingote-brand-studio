@@ -39,7 +39,7 @@ Aplicación web 100% independiente, dinámica y sin backend para la creación, p
 ### 5. 🖨️ Motor de Imposición de Pliego (Hoja Carta / A4)
 - **Tarjetas de Presentación:** 10 tarjetas por hoja (2 columnas × 5 filas) con líneas de corte para guillotina.
 - **Stickers de Cápsula:** 24 stickers circulares por hoja (4 columnas × 6 filas) listos para papel adhesivo.
-- **Fajas Precinto:** 16 fajas por hoja (2 columnas × 8 filas).
+- **Fajas Precinto:** 24 fajas por hoja (2 columnas × 12 filas), optimizadas para emparejar 1:1 con las 24 tapas de degustación.
 - Impresión nativa de alta precisión con un clic (`Cmd + P` / `Ctrl + P`).
 
 ---
